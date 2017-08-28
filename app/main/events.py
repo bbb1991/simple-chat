@@ -4,7 +4,7 @@ from .. import socketio
 
 
 @socketio.on('joined', namespace='/chat')
-def joined():
+def joined(message):
     room = session.get('room')
     join_room(room)
     emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
@@ -17,7 +17,7 @@ def text(message):
 
 
 @socketio.on('left', namespace='/chat')
-def left():
+def left(message):
     room = session.get('room')
     leave_room(room)
     emit('status', {'msg': session.get('name') + ' has left the room.'}, room=room)
