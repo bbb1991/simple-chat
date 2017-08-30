@@ -1,5 +1,7 @@
 from flask import session
 from flask_socketio import emit, join_room, leave_room
+
+from app.main.utils import get_messages_by_chat_id
 from .. import socketio
 
 
@@ -22,3 +24,9 @@ def left(message):
     leave_room(room)
     emit('status', {'msg': session.get('name') + ' has left the room.'}, room=room)
 
+
+@socketio.on('load', namespace='/chat')
+def load_messages(message):
+    chat_id = message.get('chat_id', 1)
+    room = session.get('room')
+    emit('load_messages', {'msg': get_messages_by_chat_id(chat_id)}, room=room)
