@@ -18,6 +18,8 @@ def text(message):
     room = session.get('room')
     msg = {"user_id": session.get("name"), "text": message['msg'] }
     emit('message', {'msg': json.dumps(msg)}, room=room)
+    print(msg)
+    emit('qwe', {'msg':"123"}, room=room)
 
 
 @socketio.on('left', namespace='/chat')
