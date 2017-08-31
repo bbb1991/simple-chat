@@ -10,7 +10,7 @@ from .. import socketio
 def joined(message):
     room = session.get('room')
     join_room(room)
-    emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
+    # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
 
 
 @socketio.on('text', namespace='/chat')
