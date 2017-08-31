@@ -5,7 +5,7 @@
     <body>
         <h1>Welcome to Chat service</h1>
         <form method="POST">
-            {{ form.hidden_tag() }}
+{#            {{ form.hidden_tag() }}#}
             {{ form.name.label }}: {{ form.name() }} {% for error in form.name.errors %}{{ error }}{% endfor %}<br>
             {{ form.room.label }}: {{ form.room() }} {% for error in form.room.errors %}{{ error }}{% endfor %}<br>
             {{ form.submit() }}
