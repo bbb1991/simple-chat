@@ -33,14 +33,14 @@ def load_messages(message):
 
 
 @socketio.on("set_id", namespace='/chat')
-def find_id(user_id):
-    session['name'] = user_id
-    session['room'] = user_id
-    emit('load_messages', {'msg': get_messages_by_chat_id(user_id)}, room=user_id)
+def find_id(message):
+    session['name'] = message.get('user_id')
+    session['room'] = message.get('user_id')
+    emit('load_messages', {'msg': get_messages_by_chat_id(message.get('user_id'))}, room=message.get('user_id'))
 
 
 @socketio.on("set_id_admin", namespace='/chat')
-def find_id_admin(user_id):
+def find_id_admin(message):
     session['name'] = 1
-    session['room'] = user_id
-    emit('load_messages', {'msg': get_messages_by_chat_id(user_id)}, room=user_id)
+    session['room'] = message.get('user_id')
+    emit('load_messages', {'msg': get_messages_by_chat_id(message.get('user_id'))}, room=message.get('user_id'))
