@@ -1,3 +1,4 @@
+import json
 from flask import session
 from flask_socketio import emit, join_room, leave_room
 
@@ -15,7 +16,8 @@ def joined(message):
 @socketio.on('text', namespace='/chat')
 def text(message):
     room = session.get('room')
-    emit('message', {'msg': message['msg']}, room=room)
+    msg = {"user_id": session.get("name"), "text": message['msg'] }
+    emit('message', {'msg': json.dumps(msg)}, room=room)
 
 
 @socketio.on('left', namespace='/chat')
