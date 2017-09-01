@@ -11,15 +11,19 @@ from .. import socketio
 def joined(message):
     room = session.get('room')
     join_room(room)
-    # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
+    try:
+        emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
+    except:
+        pass
 
 
 @socketio.on('text', namespace='/chat')
 def text(message):
     room = session.get('room')
-    msg = {"user_id": session.get("name"), "text": message['msg']}
+    msg = {"uid": session.get("name"), "msg": message['msg']}
+    # msg = "{\"uid\": \"" + session.get("name") + "\", \"msg\": \"" + message['msg'] + "\"}"
     print("Incoming text from: %s, room: %s, text: %s" % (session.get('name'), session.get('room'), msg))
-    emit('message', {'msg': json.dumps(msg)}, room=room)
+    emit('receive_message', {'msg': json.loads(json.dumps(msg))}, room=room)
 
 
 @socketio.on('left', namespace='/chat')
@@ -38,15 +42,15 @@ def load_messages(message):
 
 @socketio.on("set_id", namespace='/chat')
 def find_id(message):
-    session['name'] = message.get('user_id')
-    session['room'] = message.get('user_id')
+    session['name'] = message.get('uid')
+    session['room'] = message.get('uid')
     print("USER is logging in: ID: %s, ROOM: %s" % (session.get('name'), session.get('room')))
-    emit('load_messages', {'msg': get_messages_by_chat_id(message.get('user_id'))}, room=message.get('user_id'))
+    emit('load_messages', {'msg': get_messages_by_chat_id(message.get('uid'))}, room=message.get('uid'))
 
 
 @socketio.on("set_id_admin", namespace='/chat')
 def find_id_admin(message):
     session['name'] = '1'
-    session['room'] = message.get('user_id')
+    session['room'] = message.get('uid')
     print("Admin is logging in: ID: %s, ROOM: %s" % (session.get('name'), session.get('room')))
-    emit('load_messages', {'msg': get_messages_by_chat_id(message.get('user_id'))}, room=message.get('user_id'))
+    emit('load_messages', {'msg': get_messages_by_chat_id(message.get('uid'))}, room=message.get('uid'))

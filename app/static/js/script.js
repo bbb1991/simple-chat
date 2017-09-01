@@ -15,7 +15,7 @@ $(document).ready(function () {
             print_message({"msg": (obj['chat'][i].uid === 1 ? "Support" : "Client") + ": " + obj['chat'][i].msg})
         }
     });
-    socket.on('message', function (data) {
+    socket.on('receive_message', function (data) {
         print_message(data)
     });
     $('#text').keypress(function (e) {
@@ -29,7 +29,9 @@ $(document).ready(function () {
 });
 
 function print_message(data) {
-    $('#chat').val($('#chat').val() + data.msg + '\n');
+    var text = data.msg['msg'] == undefined ? data.msg : data.msg['msg'];
+    var username = data.msg['uid'] == undefined ? "" : data.msg['uid'] + ": ";
+    $('#chat').val($('#chat').val() + (username + text) + '\n');
     $('#chat').scrollTop($('#chat')[0].scrollHeight);
 }
 
