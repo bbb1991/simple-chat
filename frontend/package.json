@@ -1,14 +1,16 @@
 {
-  "name": "test4",
+  "name": "simple-chat-frontend",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-      "start": "webpack-dev-server"
+    "start": "webpack-dev-server"
   },
   "dependencies": {
     "html-webpack-plugin": "^2.30.1",
     "path": "^0.12.7",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3"
   },
