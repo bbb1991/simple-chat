@@ -19,7 +19,7 @@ def index():
 @main.route('/chat')
 def chat():
     name = session.get('name', '')
-    room = session.get('room', '')
+    room = session.get('room', 'default')
     if name == '' or room == '':
         return redirect(url_for('.index'))
     return render_template('home.html', name=name, room=room)

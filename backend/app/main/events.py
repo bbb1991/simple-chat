@@ -6,30 +6,37 @@ from flask_socketio import emit, join_room, leave_room
 from app.main.utils import get_messages_by_chat_id
 from .. import socketio
 
+users = {}
 
-@socketio.on('joined', namespace='/chat')
-def joined(message):
+
+@socketio.on('connect_b', namespace='/chat')
+def joined(data):
+    session['name'] = "anonymous"
+    session['room'] = "anonymous"
+
+    users[session['name']] = session
     room = session.get('room')
     join_room(room)
+    print(session.get('name') + " new user entered!")
     try:
-        emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
+        emit('status', {"uid": "system", 'msg': session.get('name') + ' has entered the room.'}, room=room)
     except:
         pass
 
 
-@socketio.on('text', namespace='/chat')
+@socketio.on('message_b', namespace='/chat')
 def text(message):
     room = session.get('room')
-    msg = {"uid": session.get("name"), "msg": message['msg']}
-    # msg = "{\"uid\": \"" + session.get("name") + "\", \"msg\": \"" + message['msg'] + "\"}"
+    msg = {"uid": session.get("name"), "msg": message}
     print("Incoming text from: %s, room: %s, text: %s" % (session.get('name'), session.get('room'), msg))
-    emit('receive_message', {'msg': json.loads(json.dumps(msg))}, room=room)
+    emit('message', json.loads(json.dumps(msg)), room=room)
 
 
 @socketio.on('left', namespace='/chat')
 def left(message):
     room = session.get('room')
     leave_room(room)
+    print("User %s left room" % session.get("name"))
     emit('status', {'msg': session.get('name') + ' has left the room.'}, room=room)
 
 
