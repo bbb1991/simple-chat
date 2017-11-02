@@ -12,6 +12,9 @@ users = {}
 
 @socketio.on('connect_b', namespace='/chat')
 def joined(data):
+
+    if session.get('name', None) in [x for x in users.keys()]:
+        pass
     session['name'] = "anonymous" + str(randint(100000, 999999))
     session['room'] = "anonymous"
 
