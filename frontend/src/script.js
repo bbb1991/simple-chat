@@ -5,24 +5,39 @@
 // function closeNav() {
 //     document.getElementById("myNav").style.height = "0%";
 // }
-
+var memes = {
+    ":trollface:": "<img src='http://www.unixstickers.com/image/data/stickers/meme/troll/Troll-face.sh.png'>",
+    ":okay:": "<img src='http://www.unixstickers.com/image/data/stickers/meme/troll/Troll-face.sh.png'>"
+};
 function append_message(message) {
 
-    alert(message + message.search("/:[\\w]+:/gi"));
-    if (message.search("/:.*:/gi") >= 0) {
+    console.log(message, message.search(/:.*:/g));
+    if (message.search(/:.*:/g) >= 0) {
         message = insert_meme(message);
     }
     $('#messages').append($("<li>" + message + "</li>"));
 }
 
 function insert_meme(message) {
-    return message + " meme!!!!!!!!!!!!!1";
+    for (var m in memes) {
+        console.log(m);
+        message.replace(/m/, memes[m]);
+        console.log(message);
+    }
+
+    return message;
 }
 
 let socket;
 $(document).ready(function () {
 
-    socket = io.connect('http://localhost:5000/chat');
+    var address = "http://localhost:5000/chat";
+    socket = io.connect(address);
+
+    console.log(socket);
+    if (!socket.connected) {
+        alert("Cannot connect to backend to " + address + "!\n Maybe backend not started?")
+    }
 
     // openNav();
     // New user connection
