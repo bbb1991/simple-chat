@@ -1,4 +1,5 @@
 import json
+from random import randint
 
 from flask import session
 from flask_socketio import emit, join_room, leave_room
@@ -11,7 +12,7 @@ users = {}
 
 @socketio.on('connect_b', namespace='/chat')
 def joined(data):
-    session['name'] = "anonymous"
+    session['name'] = "anonymous" + str(randint(100000, 999999))
     session['room'] = "anonymous"
 
     users[session['name']] = session
@@ -20,6 +21,7 @@ def joined(data):
     print(session.get('name') + " new user entered!")
     try:
         emit('status', {"uid": "system", 'msg': session.get('name') + ' has entered the room.'}, room=room)
+        emit('users', [x for x in users.keys()], room=room)
     except:
         pass
 
